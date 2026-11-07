@@ -1,0 +1,15 @@
+   name: build
+   on: [push, workflow_dispatch]
+   jobs:
+     build:
+       runs-on: ubuntu-latest
+       steps:
+         - uses: actions/checkout@v4
+         - name: Ambil header AML
+           run: git clone --depth 1 https://github.com/RusJJ/AndroidModLoader.git aml && cp -r aml/mod ./mod
+         - name: Build (NDK)
+           run: $ANDROID_NDK_HOME/ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=jni/Android.mk NDK_APPLICATION_MK=jni/Application.mk
+         - uses: actions/upload-artifact@v4
+           with:
+             name: libBulletPhysics64
+             path: libs/arm64-v8a/libBulletPhysics64.so
